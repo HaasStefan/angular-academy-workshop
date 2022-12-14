@@ -9,8 +9,12 @@
       <input [formControl]="control" class="form-control" />
     </div>
 
-    <div *ngIf="loading">Loading ...</div>
+    <div *ngIf="loading$ | async">Loading ...</div>
+
+    <div [ngStyle]="{backgroundColor: (online$ | async) ? 'green' : 'red'}">Online: {{online$ | async}}</div>
   </div>
+
+  {{obs$ | async}}
 
   <table class="table table-striped">
     <thead>
