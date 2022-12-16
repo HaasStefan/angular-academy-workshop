@@ -7,6 +7,7 @@ import {
   WebComponentWrapperOptions,
 } from '@angular-architects/module-federation-tools';
 import { FlightLookaheadComponent } from './flight-lookahead/flight-lookahead.component';
+import { defer, map, retry } from 'rxjs';
 
 export const APP_ROUTES: Routes = [
   {
@@ -22,6 +23,18 @@ export const APP_ROUTES: Routes = [
     path: 'basket',
     component: BasketComponent,
     outlet: 'aux',
+  },
+  {
+    path: 'flight-booking',
+    loadChildren: () => defer(() => import('./flight-booking/flight-booking.module')).pipe(
+      map(m => m.FlightBookingModule),
+      retry(3)
+    ),
+    data: {
+      preload: true
+    }
+    // loadChildren: async () => (await import('./flight-booking/flight-booking.module')).FlightBookingModule
+    // loadChildren: () => import('./flight-booking/flight-booking.module').then(m => m.FlightBookingModule)
   },
   {
     path: 'passenger',
