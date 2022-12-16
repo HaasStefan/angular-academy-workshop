@@ -16,6 +16,12 @@ import { SharedModule } from './shared/shared.module';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FlightLookaheadComponent } from './flight-lookahead/flight-lookahead.component';
+import { StoreModule } from '@ngrx/store';
+import { reducers, metaReducers } from './+state';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from '../environments/environment';
+import { RouterState, StoreRouterConnectingModule } from '@ngrx/router-store';
+import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
   imports: [
@@ -27,7 +33,11 @@ import { FlightLookaheadComponent } from './flight-lookahead/flight-lookahead.co
     ReactiveFormsModule,
     FlightLibModule.forRoot(),
     SharedModule.forRoot(),
+    EffectsModule.forRoot(),
     RouterModule.forRoot(APP_ROUTES),
+    StoreModule.forRoot(reducers, { metaReducers }),
+    !environment.production ? StoreDevtoolsModule.instrument() : [],
+    StoreRouterConnectingModule.forRoot({stateKey: 'router', routerState: RouterState.Minimal })
   ],
   declarations: [
     AppComponent,
